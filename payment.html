@@ -22,10 +22,7 @@
   <div class="app-layout">
     <header class="header">
       <div class="container header-container">
-        <a href="index.html" class="logo-link">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M16 8.2A2.22 2.22 0 0 0 13.8 6c-.8 0-1.4.3-1.8.9-.4-.6-1-.9-1.8-.9A2.22 2.22 0 0 0 8 8.2c0 .6.3 1.2.7 1.6A226.652 226.652 0 0 0 12 13a404 404 0 0 0 3.3-3.1 2.413 2.413 0 0 0 .7-1.7"></path><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg>
-          <span class="logo-text">Kgodiso Writes</span>
-        </a>
+        <div class="logo-link"><img src="logo.png" class="logo-image" alt="Kgodiso Writes logo"></div>
         <nav class="desktop-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="books.html" class="nav-link">Books</a>
@@ -70,8 +67,12 @@
                 <input type="email" id="payerEmail" name="payerEmail" class="form-control" required placeholder="you@example.com">
               </div>
               <div class="form-group">
-                <label class="form-label" for="payerName">Name</label>
+                <label class="form-label" for="payerName">Full Names</label>
                 <input type="text" id="payerName" class="form-control" required placeholder="Jane Doe">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="payerPhone">Phone Number</label>
+                <input type="tel" id="payerPhone" class="form-control" required placeholder="+27 12 345 6789">
               </div>
               <p style="color: var(--muted-foreground); margin-top: 1rem;">You will be redirected to PayFast to complete your payment.</p>
               <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem; justify-content: center; font-size: 1rem; padding: 1rem;">
@@ -112,3 +113,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+

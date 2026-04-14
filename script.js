@@ -142,6 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('checkout-form')) {
     const itemsContainer = document.getElementById('checkout-items');
     const subtotalEl = document.getElementById('checkout-subtotal');
+    const deliveryEl = document.getElementById('checkout-delivery');
+    const deliveryPriceEl = document.getElementById('delivery-price');
     const totalEl = document.getElementById('checkout-total');
     
     const cart = window.appState.cart;
@@ -159,10 +161,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtotal = window.appState.getCartTotal();
     const delivery = window.appState.getDeliveryFee();
     subtotalEl.textContent = `R${subtotal.toFixed(2)}`;
+    deliveryEl.textContent = `R${delivery.toFixed(2)}`;
+    deliveryPriceEl.textContent = `R${delivery.toFixed(2)}`;
     totalEl.textContent = `R${(subtotal + delivery).toFixed(2)}`;
 
     document.getElementById('checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
+      const formData = {
+        fullName: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        zip: document.getElementById('zip').value
+      };
+      localStorage.setItem('checkoutData', JSON.stringify(formData));
       window.location.href = 'payment.html';
     });
   }
@@ -183,6 +196,12 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'cart.html';
     }
 
+    // Populate form with checkout data
+    const checkoutData = JSON.parse(localStorage.getItem('checkoutData') || '{}');
+    if (checkoutData.fullName) document.getElementById('payerName').value = checkoutData.fullName;
+    if (checkoutData.phone) document.getElementById('payerPhone').value = checkoutData.phone;
+    if (checkoutData.email) document.getElementById('payerEmail').value = checkoutData.email;
+
     const subtotal = window.appState.getCartTotal();
     const delivery = window.appState.getDeliveryFee();
     const total = subtotal + delivery;
@@ -191,7 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
     deliveryEl.textContent = `R${delivery.toFixed(2)}`;
     totalEl.textContent = `R${total.toFixed(2)}`;
     payfastAmount.value = total.toFixed(2);
-    payfastCustom.value = JSON.stringify({ subtotal: subtotal.toFixed(2), delivery: delivery.toFixed(2), total: total.toFixed(2), items: cart.map(item => ({ id: item.id, title: item.title, qty: item.quantity })) });
+    payfastCustom.value = JSON.stringify({ 
+      subtotal: subtotal.toFixed(2), 
+      delivery: delivery.toFixed(2), 
+      total: total.toFixed(2), 
+      items: cart.map(item => ({ id: item.id, title: item.title, qty: item.quantity })),
+      customer: checkoutData
+    });
 
     const buildAbsoluteUrl = (path) => {
       if (window.location.protocol.startsWith('http')) {
@@ -241,7 +266,7 @@ class AppState {
   }
 
   getDeliveryFee() {
-    // No delivery fee only if cart contains ONLY the eBook "Lengwalo le le timetšego" (id: 3)
+    // Only waive delivery when the cart contains only the eBook "Lengwalo le le timetšego" (id: 3)
     const hasOnlyEbook = this.cart.length > 0 && this.cart.every(item => item.id === '3');
     return hasOnlyEbook ? 0 : 60;
   }
